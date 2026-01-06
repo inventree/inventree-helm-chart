@@ -88,7 +88,7 @@ Render secrets
   {{- range .data }}
   - name: {{ .name }}
   {{- if .value }}
-    value: {{ .value }}
+    value: {{ .value | quote }}
   {{- else if .valueFrom }}
     valueFrom:
       secretKeyRef:
