@@ -17,3 +17,19 @@
   {{- end -}}
   {{- join "," ($data |uniq) | quote -}}
 {{- end -}}
+
+{{/* Return list of hosts defined in ingresses for server_name */}}
+{{- define "ingress.listServers" -}}
+  {{- $rootContext := .data -}}
+  {{- $data := list -}}
+
+  {{- $enabledIngresses := (include "ingress.getEnabled" (dict "rootContext" $rootContext ) | fromYaml ) -}}
+
+  {{- range $id := keys $enabledIngresses -}}
+    {{- $ingressObject := (include "ingress.getById" (dict "rootContext" $rootContext "id" $id) | fromYaml) -}}
+    {{- range $ingressObject.hosts -}}
+      {{- $data = append $data .host -}}
+    {{- end -}}
+  {{- end -}}
+  {{- join " " ($data |uniq) -}}
+{{- end -}}
