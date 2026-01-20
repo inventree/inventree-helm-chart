@@ -6,22 +6,18 @@ data:
   # Based on recommended configuration from Gunicorn documentation:
   # https://docs.gunicorn.org/en/latest/deploy.html
   default.conf: |-
-      # TODO: Improved security once we figure out how to populate
-      # `server_name` with ingresses in server block below...
-      #server {
-      #  # if no Host match, close the connection to prevent host spoofing
-      #  listen 80 default_server;
-      #  return 444;
-      #}
+      server {
+        # If none of the hosts match below, close the connection
+        # to prevent host spoofing.
+        listen 80 default_server;
+        return 444;
+      }
 
       server {
-        # use 'listen 80 deferred;' for Linux
-        # use 'listen 80 accept_filter=httpready;' for FreeBSD
-        listen 80 default_server;
+        listen 80 deferred;
         client_max_body_size 4G;
     
-        # TODO: Populate with allowed ingresses?
-        #server_name example.com www.example.com;
+        server_name {{ (include "ingress.listServers" (dict "data" . )) }};
     
         keepalive_timeout 5;
     
