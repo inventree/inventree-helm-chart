@@ -193,6 +193,9 @@ ingress:
 # -- Expose the service via gateway-api HTTPRoute
 # Requires Gateway API resources and suitable controller installed within the cluster
 # (see: https://gateway-api.sigs.k8s.io/guides/)
+# NB! Note that `httpRoute` is not fully integrated with Inventree application:
+# TODO: `hostNames` should be properly included in INVENTREE_TRUSTED_ORIGINS
+# and nginx `server_name` configuration.
 httpRoute:
   # HTTPRoute enabled.
   enabled: false
